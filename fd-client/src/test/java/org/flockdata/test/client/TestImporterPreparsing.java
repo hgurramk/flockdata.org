@@ -20,6 +20,7 @@
 package org.flockdata.test.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import junit.framework.TestCase;
 import org.flockdata.helper.FlockException;
 import org.flockdata.profile.ImportProfile;
 import org.flockdata.registration.bean.SystemUserResultBean;
@@ -39,7 +40,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * Created by mike on 28/01/15.
@@ -84,7 +84,7 @@ public class TestImporterPreparsing extends AbstractImport {
             assertEquals(4, entityBatch.size());
             for (EntityInputBean entityInputBean : entityBatch) {
                 assertFalse("Expression not parsed for callerRef",entityInputBean.getCallerRef().contains("|"));
-                assertTrue("Tag not set", entityInputBean.getTags().size() == 3);
+                TestCase.assertTrue("Tag not set", entityInputBean.getTags().size() == 3);
                 TagInputBean politician= null;
                 for (TagInputBean tagInputBean : entityInputBean.getTags()) {
                     assertFalse("Expression not parsed for code", tagInputBean.getCode().contains("|"));
@@ -98,7 +98,7 @@ public class TestImporterPreparsing extends AbstractImport {
                 HashMap link = (HashMap) politician.getEntityLinks().get("receives");
                 assertNotNull(link);
                 assertNotNull(link.get("amount"));
-                assertTrue("Amount not calculated as a value", Integer.parseInt(link.get("amount").toString()) >0);
+                TestCase.assertTrue("Amount not calculated as a value", Integer.parseInt(link.get("amount").toString()) > 0);
 
             }
             ObjectMapper om = new ObjectMapper();

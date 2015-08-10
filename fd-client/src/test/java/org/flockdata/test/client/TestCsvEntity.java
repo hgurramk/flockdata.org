@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * User: mike

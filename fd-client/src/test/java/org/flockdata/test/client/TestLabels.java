@@ -32,7 +32,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * Created by mike on 1/03/15.
@@ -62,8 +61,8 @@ public class TestLabels extends AbstractImport {
                 throw new FlockException("Unexpected tag - " + tagInputBean.toString());
 
         }
-        assertTrue("Occupancy Not Found", occupancy);
-        assertTrue("loanType Not Found", loanType);
+        TestCase.assertTrue("Occupancy Not Found", occupancy);
+        TestCase.assertTrue("loanType Not Found", loanType);
     }
 
     @Test

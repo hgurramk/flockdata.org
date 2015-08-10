@@ -19,6 +19,7 @@
 
 package org.flockdata.test.client;
 
+import junit.framework.TestCase;
 import org.flockdata.client.Configure;
 import org.flockdata.profile.ImportProfile;
 import org.flockdata.registration.bean.TagInputBean;
@@ -32,7 +33,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * Created by mike on 27/01/15.
@@ -73,10 +73,10 @@ public class TestCSVColumnParsing extends AbstractImport {
             }
 
         }
-        assertTrue("Failed to find OS Category Tag", foundA);
-        assertTrue("Failed to find Expenditure Tag", foundB);
-        assertTrue("Failed to find InterestGroup Tag", foundC);
-        assertTrue("Failed to find Politician Tag", foundD);
+        TestCase.assertTrue("Failed to find OS Category Tag", foundA);
+        TestCase.assertTrue("Failed to find Expenditure Tag", foundB);
+        TestCase.assertTrue("Failed to find InterestGroup Tag", foundC);
+        TestCase.assertTrue("Failed to find Politician Tag", foundD);
         for (EntityInputBean entityInputBean : getFdWriter().getEntities()) {
             assertEquals("4111320141231324700", entityInputBean.getCallerRef());
         }

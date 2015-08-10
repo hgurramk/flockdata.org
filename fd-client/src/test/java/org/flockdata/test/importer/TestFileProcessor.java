@@ -19,6 +19,7 @@
 
 package org.flockdata.test.importer;
 
+import junit.framework.TestCase;
 import org.flockdata.transform.FileProcessor;
 import org.junit.Test;
 
@@ -26,7 +27,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 /**
  * Validate File Processor routines - Please add to this as you can
@@ -43,9 +43,9 @@ public class TestFileProcessor {
         assertFalse("Less than skip count failed", fp.stopProcessing(49));
         assertFalse("Processing should continue", fp.stopProcessing(50));
         assertFalse("Processing should start", fp.stopProcessing(51));
-        assertTrue("Processing should stop", fp.stopProcessing(100));
-        assertTrue("Processing should stop", fp.stopProcessing(101));
-        assertTrue("Processing should really have stopped", fp.stopProcessing(101));
+        TestCase.assertTrue("Processing should stop", fp.stopProcessing(100));
+        TestCase.assertTrue("Processing should stop", fp.stopProcessing(101));
+        TestCase.assertTrue("Processing should really have stopped", fp.stopProcessing(101));
 
         fp = new FileProcessor(50000,10);
         assertFalse("Processing should continue with no log message", fp.stopProcessing(1));
@@ -74,11 +74,11 @@ public class TestFileProcessor {
 
         files = fileProcessor.resolveFiles("/data/*");
         assertFalse(files.isEmpty());
-        assertTrue("Not enough files found", files.size()> 5);
+        TestCase.assertTrue("Not enough files found", files.size() > 5);
 
         files = fileProcessor.resolveFiles("/data/");
         assertFalse(files.isEmpty());
-        assertTrue("Not enough files found", files.size() > 5);
+        TestCase.assertTrue("Not enough files found", files.size() > 5);
 
         files = fileProcessor.resolveFiles("/csvtest.json");
         assertFalse(files.isEmpty());
