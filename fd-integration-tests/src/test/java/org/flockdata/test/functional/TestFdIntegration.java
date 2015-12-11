@@ -861,7 +861,7 @@ public class TestFdIntegration {
     @Test
     public void date_utcDatesThruToSearch() throws Exception {
         // DAT-196
-        assumeTrue(runMe);
+//        assumeTrue(runMe);
         logger.info("## date_utcDatesThruToSearch");
         SystemUser su = registerSystemUser("Kiwi-UTC");
         FortressInputBean fib = new FortressInputBean("utcDateFieldsThruToSearch", false);

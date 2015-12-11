@@ -47,8 +47,8 @@ public class SearchAdmin {
     @Autowired
     TrackSearchDao engineDao;
 
-    @Value("${abengine.result}")
-    String abEngine;
+    @Value("${fdengine.result}")
+    String fdEngine;
 
     @Value("${rabbit.host}")
     String rabbitHost;
@@ -60,28 +60,28 @@ public class SearchAdmin {
     String esMappingPath;
 
     private Logger logger = LoggerFactory.getLogger(SearchAdmin.class);
-    String esDefaultMapping= "fd-default-mapping.json";
+    String esDefaultMapping = "fd-default-mapping.json";
     String esTaxonomyMapping = "fd-taxonomy-mapping.json";
 
 
-    public String getEsMappingPath(){
-        if ( esMappingPath.equals("${es.mappings}"))
+    public String getEsMappingPath() {
+        if (esMappingPath.equals("${es.mappings}"))
             return ""; // Internal
         return esMappingPath;
     }
 
     public String getEsDefaultSettings() {
-        return getEsMappingPath()+ "/fd-default-settings.json";
+        return getEsMappingPath() + "/fd-default-settings.json";
     }
 
-    public String getEsDefaultMapping(EntityService.TAG_STRUCTURE tagStructure){
-        if ( tagStructure != null && tagStructure == EntityService.TAG_STRUCTURE.TAXONOMY)
-            return getEsMappingPath()+"/"+ esTaxonomyMapping;
+    public String getEsDefaultMapping(EntityService.TAG_STRUCTURE tagStructure) {
+        if (tagStructure != null && tagStructure == EntityService.TAG_STRUCTURE.TAXONOMY)
+            return getEsMappingPath() + "/" + esTaxonomyMapping;
         else
-            return getEsMappingPath()+"/"+esDefaultMapping;
+            return getEsMappingPath() + "/" + esDefaultMapping;
     }
 
-//    @Secured({"ROLE_FD_ADMIN"})
+    //    @Secured({"ROLE_FD_ADMIN"})
     // DAT-382
     public Map<String, Object> getHealth() {
         String version = VersionHelper.getFdVersion();
@@ -110,12 +110,8 @@ public class SearchAdmin {
 
         String integration = System.getProperty("fd.integration");
         healthResults.put("fd.integration", integration);
-        if ("http".equalsIgnoreCase(integration)) {
-            healthResults.put("fdengine.result", abEngine);
-        } else {
-            healthResults.put("rabbitmq.host", rabbitHost);
-            healthResults.put("rabbitmq.port", rabbitPort);
-        }
+        healthResults.put("rabbitmq.host", rabbitHost);
+        healthResults.put("rabbitmq.port", rabbitPort);
         return healthResults;
 
     }
