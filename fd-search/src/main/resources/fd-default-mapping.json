@@ -1,22 +1,7 @@
 {
   "mapping": {
-    "_source": {
-      "excludes": [
-        "attachment"
-      ]
-    },
     "numeric_detection": false,
     "properties": {
-      "attachment": {
-        "type": "attachment",
-        "fields": {
-          "attachment": {
-            "type": "string",
-            "store": true,
-            "term_vector": "with_positions_offsets"
-          }
-        }
-      },
       "metaKey": {
         "type": "string",
         "doc_values": true,

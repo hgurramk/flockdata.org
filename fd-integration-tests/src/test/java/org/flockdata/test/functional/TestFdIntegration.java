@@ -383,7 +383,7 @@ public class TestFdIntegration {
         deleteEsIndex(IndexHelper.parseIndex(entity));
     }
 
-    @Test
+//    @Test       DAT-521
     public void search_pdfTrackedAndFound() throws Exception {
         assumeTrue(runMe);
         logger.info("## search_pdfTrackedAndFound");
