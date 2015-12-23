@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
   <context confirmationNeeded="false" name="Default">
-    <contextParameter comment="" name="Param1" prompt="Param1?" promptNeeded="false" repositoryContextId="_-fBigKJnEeWM7uuzDRJv_g" type="id_String" value="&quot;C:\FlockData\column-parsing.json&quot;"/>
-    <contextParameter comment="" name="Param2" prompt="Param2?" promptNeeded="false" repositoryContextId="_-fBigKJnEeWM7uuzDRJv_g" type="id_String" value="&quot;C:\FlockData\pac.txt &quot;"/>
+    <contextParameter comment="" name="Param1" prompt="Param1?" promptNeeded="true" repositoryContextId="_-fBigKJnEeWM7uuzDRJv_g" type="id_String" value="&quot;C:\FlockData\column-parsing.json&quot;"/>
+    <contextParameter comment="" name="Param2" prompt="Param2?" promptNeeded="true" repositoryContextId="_-fBigKJnEeWM7uuzDRJv_g" type="id_String" value="&quot;C:\FlockData\pac.txt &quot;"/>
   </context>
   <parameters>
     <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value="0" show="false"/>
@@ -127,8 +127,8 @@
   <node componentName="tJavaRow" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="384" posY="96">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaRow_1" show="false"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="C:\Users\Mahesh Krishna\Downloads\TOS_DI-20150908_1633-V6.0.1\TOS_DI-20150908_1633-V6.0.1\configuration\lib\java" show="false"/>
-    <elementParameter field="MEMO_JAVA" name="CODE" value="try{&#xA;&#x9;Map&lt;String, Object> jsonData = new HashMap&lt;String, Object>();&#xA;ImportProfile importProfile = ClientConfiguration.getImportParams(context.Param1);&#xA;EntityInputBean eib = routines.TransformerRoutine.transformToEntity(jsonData, importProfile);&#xA;System.out.println(&quot;eib======================&quot; +eib);&#xA;}catch(Exception e){&#xA;System.out.println(&quot;Exception=======================&quot; +e.getMessage());&#xA;}&#xA;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;"/>
-    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="&#x9;&#x9;&#x9;  import org.flockdata.transform.FileProcessor;&#xA;&#x9;&#x9;&#x9;  import org.flockdata.profile.ImportProfile;&#xA;&#x9;&#x9;&#x9;  import org.flockdata.transform.ClientConfiguration;&#xA;import org.flockdata.track.bean.EntityInputBean;&#xA;&#x9;&#x9;&#x9;  import java.util.Map;&#xA;&#x9;&#x9;&#x9;  import java.io.File;&#xA;&#x9;&#x9;&#x9;  import java.util.HashMap;&#xA;&#x9;&#x9;&#x9;   &#xA;&#xA;"/>
+    <elementParameter field="MEMO_JAVA" name="CODE" value="try{&#xA;&#x9;Map&lt;String, Object> jsonData = new HashMap&lt;String, Object>();&#xA;&#x9;ImportProfile importProfile = ClientConfiguration.getImportParams(context.Param1);&#xA;&#x9;EntityInputBean eib = routines.TransformerRoutine.transformToEntity(jsonData, importProfile);&#xA;&#x9;System.out.println(&quot;eib======================&quot; +eib);&#xA;&#x9;}catch(Exception e){&#xA;&#x9;System.out.println(&quot;Exception=======================&quot; +e.getMessage());&#xA;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.flockdata.profile.ImportProfile;&#xA;import org.flockdata.transform.ClientConfiguration;&#xA;import org.flockdata.track.bean.EntityInputBean;&#xA;import java.util.Map;&#xA;import java.io.File;&#xA;import java.util.HashMap;&#xA;&#x9;&#x9;&#x9;   &#xA;&#xA;"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
     <metadata connector="FLOW" name="tJavaRow_1">
       <column comment="" key="false" length="200" name="row" nullable="true" pattern="" precision="-1" sourceType="" type="id_String" originalLength="200" usefulColumn="true"/>

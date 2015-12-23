@@ -106,7 +106,7 @@
     <routinesParameter id="_0PEF8Gv-EeWqNff92eHj4Q" name="TalendDataGenerator"/>
     <routinesParameter id="_0Pgx4Gv-EeWqNff92eHj4Q" name="TalendDate"/>
     <routinesParameter id="_0QjTsGv-EeWqNff92eHj4Q" name="TalendString"/>
-    <routinesParameter id="_wgDgQKVnEeWZQMt0um8aTA" name="MyRoutineDemo"/>
+    <routinesParameter id="_p8pSAKimEeWzuecH-WbgLA" name="TransformerRoutine"/>
     <routinesParameter id="_wgDgQKVnEeWZQMt0um8aTA" name="FileProcessorRoutine"/>
   </parameters>
   <node componentName="tRowGenerator" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="192" posY="96">
@@ -126,8 +126,8 @@
   <node componentName="tJavaRow" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="384" posY="96">
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaRow_1" show="false"/>
     <elementParameter field="DIRECTORY" name="JAVA_LIBRARY_PATH" value="C:\Users\Mahesh Krishna\Downloads\TOS_DI-20150908_1633-V6.0.1\TOS_DI-20150908_1633-V6.0.1\configuration\lib\java" show="false"/>
-    <elementParameter field="MEMO_JAVA" name="CODE" value=" try {&#x9;&#xA; &#x9;File file = new File(context.Param1);&#xA; &#x9;System.out.println(&quot;context---&quot; + context.Param1);&#xA; &#x9;&#xA; &#x9;ClientConfiguration configuration = Configure.readConfiguration(file);&#xA; &#x9;configuration.setDefaultUser(&quot;test&quot;);&#xA; &#x9;&#xA; &#x9;ImportProfile params = ClientConfiguration.getImportParams(context.Param1);&#xA; &#x9;System.out.println(&quot;context---&quot; + context.Param2);&#xA; &#x9;FdWriter fdWriter = AbstractImport.getFdWriter();&#xA;&#x9;//FileProcessor fileProcessor = new FileProcessor();&#xA;&#x9;long rows = routines.FileProcessorRoutine.processFile(params, context.Param2, fdWriter, null,configuration);&#xA;&#x9;System.out.println(&quot;rows =====================&quot; + rows);&#xA; &#x9;&#xA; }catch(Exception e){&#xA; &#x9;System.out.println(&quot;Exception =======================&quot;+ e.getMessage());&#xA; &#x9;}"/>
-    <elementParameter field="MEMO_IMPORT" name="IMPORT" value=" import org.flockdata.transform.FileProcessor;&#xA;import org.flockdata.profile.ImportProfile;&#xA;import org.flockdata.transform.ClientConfiguration;&#xA;import org.flockdata.client.Configure; &#xA;import org.flockdata.test.client.AbstractImport;&#xA;import org.flockdata.transform.FdWriter;&#xA;import java.io.File;&#xA; &#xA;&#xA;"/>
+    <elementParameter field="MEMO_JAVA" name="CODE" value="try{&#xA;&#x9;Map&lt;String, Object> jsonData = new HashMap&lt;String, Object>();&#xA;&#x9;ImportProfile importProfile = ClientConfiguration.getImportParams(context.Param1);&#xA;&#x9;TagInputBean tib = routines.TransformerRoutine.transformToTag(jsonData, importProfile);&#xA;&#x9;System.out.println(&quot;tib======================&quot; +tib);&#xA;&#x9;}catch(Exception e){&#xA;&#x9;System.out.println(&quot;Exception=======================&quot; +e.getMessage());&#xA;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.flockdata.transform.FileProcessor;&#xA;import org.flockdata.profile.ImportProfile;&#xA;import org.flockdata.transform.ClientConfiguration;&#xA;import org.flockdata.registration.bean.TagInputBean;&#xA;import java.util.Map;&#xA;import java.io.File;&#xA;import java.util.HashMap;&#xA;&#x9;&#x9;&#x9;   &#xA;&#xA;"/>
     <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
     <metadata connector="FLOW" name="tJavaRow_1">
       <column comment="" key="false" length="200" name="row" nullable="true" pattern="" precision="-1" sourceType="" type="id_String" originalLength="200" usefulColumn="true"/>
@@ -180,7 +180,7 @@
     <elementParameter field="CHECK" name="SHOW_SUBJOB_TITLE" value="true"/>
     <elementParameter field="TEXT" name="UNIQUE_NAME" value="tRowGenerator_1" show="false"/>
     <elementParameter field="TEXT" name="SUBJOB_TITLE" value="Processing Data"/>
-    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="128;255;255"/>
-    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="255;128;255"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="128;255;128"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="207;226;236"/>
   </subjob>
 </talendfile:ProcessType>
