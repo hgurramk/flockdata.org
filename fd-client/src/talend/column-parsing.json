@@ -47,6 +47,7 @@
       "code": "#row['8']=='ID' ?'I':'D'",
       "name": "#row['8']=='ID' ?'Indirect':'Direct'",
       "relationship": "classified"
+
     }
   }
 }
