@@ -21,6 +21,14 @@ package org.flockdata.track.bean;
 
 import org.flockdata.model.DocumentType;
 import org.flockdata.model.Entity;
+import org.flockdata.model.EntityTag;
+import org.flockdata.search.IndexHelper;
+import org.flockdata.search.model.SearchTag;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: mike
@@ -33,9 +41,18 @@ public class EntityKeyBean {
     private String company;
     private String metaKey;
     private String code;
+    private String name;
+
+    private String description;
+
+    private String index;
+
+    private  HashMap<String, Map<String, ArrayList<SearchTag>>>  searchTags = new HashMap<>();
+
+    private String relationship; // Entity to entity relationship
 
 
-    public EntityKeyBean(){}
+    private EntityKeyBean(){}
 
     public EntityKeyBean (DocumentType documentType, String code){
         this.fortressName = documentType.getFortress().getName();
@@ -62,10 +79,36 @@ public class EntityKeyBean {
     }
 
     public EntityKeyBean(Entity entity) {
+        this();
         this.fortressName = entity.getSegment().getFortress().getName();
         this.code = entity.getCode();
         this.documentType = entity.getType();
         this.metaKey = entity.getMetaKey();
+        this.index = IndexHelper.parseIndex(entity);
+        this.description = entity.getDescription();
+        this.name = entity.getName();
+    }
+
+    public EntityKeyBean(Entity entity, Collection<EntityTag> entityTags) {
+        this(entity);
+        for (EntityTag entityTag : entityTags) {
+            Map<String, ArrayList<SearchTag>> byRelationship = searchTags.get(entityTag.getRelationship());
+            if ( byRelationship == null){
+                byRelationship = new HashMap<>();
+                String rlx = entityTag.getRelationship();
+
+                if (rlx == null ){
+                    rlx = "default";
+                }
+                searchTags.put(rlx.toLowerCase(), byRelationship);
+            }
+            ArrayList<SearchTag> tags = byRelationship.get(entityTag.getTag().getLabel());
+            if ( tags == null ){
+                tags = new ArrayList<>();
+                byRelationship.put(entityTag.getTag().getLabel(), tags);
+            }
+            tags.add(new SearchTag(entityTag)) ;
+        }
     }
 
     public String getFortressName() {
@@ -84,6 +127,14 @@ public class EntityKeyBean {
 
     public String getCompany() {
         return company;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public HashMap<String, Map<String, ArrayList<SearchTag>>> getSearchTags() {
+        return searchTags;
     }
 
     @Override
@@ -119,5 +170,22 @@ public class EntityKeyBean {
                 ", documentType='" + documentType + '\'' +
                 ", code='" + code + '\'' +
                 '}';
+    }
+
+    public String getRelationship() {
+        return relationship;
+    }
+
+    public EntityKeyBean addRelationship(String relationship) {
+        this.relationship = relationship;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
     }
 }

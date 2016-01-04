@@ -19,9 +19,10 @@
 
 package org.flockdata.test.engine.endpoint;
 
-import com.jayway.jsonpath.JsonModel;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.flockdata.authentication.LoginRequest;
 import org.flockdata.helper.ApiKeyInterceptor;
+import org.flockdata.helper.FdJsonObjectMapper;
 import org.flockdata.helper.JsonUtils;
 import org.flockdata.model.*;
 import org.flockdata.query.MatrixInputBean;
@@ -59,7 +60,7 @@ public class EngineEndPoints {
         return mockMvc;
     }
 
-    public org.flockdata.model.Fortress createFortress(SystemUser su, String fortressName)
+    public Fortress createFortress(SystemUser su, String fortressName)
             throws Exception {
 
         MvcResult response = getMockMvc()
@@ -220,8 +221,8 @@ public class EngineEndPoints {
 
     }
 
-    public TagResultBean getTag(String label, String code) throws Exception{
-        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/tag/" + label + "/"+code)
+    public TagResultBean getTag(String label, String code) throws Exception {
+        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/tag/" + label + "/" + code)
                         .contentType(MediaType.APPLICATION_JSON)
 
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -229,6 +230,15 @@ public class EngineEndPoints {
         byte[] json = response.getResponse().getContentAsByteArray();
 
         return JsonUtils.getBytesAsObject(json, TagResultBean.class);
+    }
+
+    public void getTagNotFound(String label, String code) throws Exception {
+        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/tag/" + label + "/" + code)
+                        .contentType(MediaType.APPLICATION_JSON)
+
+        ).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+
+
     }
 
     public Collection<DocumentResultBean> getDocuments(String fortress) throws Exception {
@@ -262,7 +272,7 @@ public class EngineEndPoints {
         return JsonUtils.getAsCollection(json, TagResultBean.class);
     }
 
-    public Map<String, Object> getConnectedTags(String label, String code, String relationship, String targetLabel) throws Exception{
+    public Map<String, Object> getConnectedTags(String label, String code, String relationship, String targetLabel) throws Exception {
         MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/tag/" + label + "/" + code + "/path/" + relationship + "/" + targetLabel)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -289,11 +299,11 @@ public class EngineEndPoints {
         ).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
     }
 
-    public Collection<DocumentResultBean> makeDocuments(SystemUser su, Fortress fortress, Collection<DocumentTypeInputBean> docTypes) throws Exception{
+    public Collection<DocumentResultBean> makeDocuments(SystemUser su, Fortress fortress, Collection<DocumentTypeInputBean> docTypes) throws Exception {
         MvcResult response = getMockMvc()
                 .perform(
                         MockMvcRequestBuilders
-                                .post("/fortress/"+fortress.getCode() +"/docs")
+                                .post("/fortress/" + fortress.getCode() + "/docs")
                                 .header("api-key", su.getApiKey())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(JsonUtils.getJSON(docTypes))).andReturn();
@@ -302,13 +312,26 @@ public class EngineEndPoints {
         return JsonUtils.getAsCollection(json, DocumentResultBean.class);
     }
 
-    public Collection<FortressSegment> getSegments(String fortressCode) throws Exception{
-        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/fortress/" + fortressCode +"/segments")
+    public Collection<FortressSegment> getSegments(String fortressCode) throws Exception {
+        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/fortress/" + fortressCode + "/segments")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
         String json = response.getResponse().getContentAsString();
 
         return JsonUtils.getAsCollection(json, FortressSegment.class);
+
+    }
+
+    public Collection<Map<String, TagResultBean>> getTagPaths(String label, String code, String targetLabel) throws Exception {
+        MvcResult response = getMockMvc().perform(MockMvcRequestBuilders.get("/path/" + label + "/" + code + "/4/" + targetLabel)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+        String json = response.getResponse().getContentAsString();
+
+        return FdJsonObjectMapper.getObjectMapper().readValue(json, new TypeReference<Collection<Map<String, TagResultBean>>>() {
+        });
+//        return JsonUtils.getAsType(json, type )
+
 
     }
 }

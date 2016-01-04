@@ -36,7 +36,7 @@ import java.util.Map;
  * Time: 3:38 PM
  */
 public class JsonUtils {
-    private static final ObjectMapper mapper = FlockDataJsonFactory.getObjectMapper();
+    private static final ObjectMapper mapper = FdJsonObjectMapper.getObjectMapper();
 
     public static ObjectMapper getMapper() {
         return mapper;
@@ -88,7 +88,7 @@ public class JsonUtils {
     }
 
     public static Map<String,Object> getAsMap(byte[] json) throws IOException {
-        Map<String,Object> result = mapper.readValue(json, Map.class);
+        Map result = mapper.readValue(json, Map.class);
         return result;
     }
 

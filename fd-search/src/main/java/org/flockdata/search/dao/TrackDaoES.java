@@ -32,13 +32,13 @@ import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.mapper.MapperParsingException;
-import org.elasticsearch.indices.IndexMissingException;
-import org.flockdata.helper.FlockDataJsonFactory;
+import org.flockdata.helper.FdJsonObjectMapper;
 import org.flockdata.model.Entity;
 import org.flockdata.search.IndexHelper;
 import org.flockdata.search.model.EntitySearchSchema;
 import org.flockdata.search.model.SearchTag;
 import org.flockdata.search.service.TrackSearchDao;
+import org.flockdata.track.bean.EntityKeyBean;
 import org.flockdata.track.bean.SearchChange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class TrackDaoES implements TrackSearchDao {
                 .setSource(source);
 
         irb.setId(searchChange.getSearchKey());
-        if ( searchChange.getParent()!=null )
+        if (searchChange.getParent() != null)
             irb.setParent(searchChange.getParent().getCode());
         else
             irb.setRouting(searchChange.getCode());
@@ -108,14 +108,13 @@ public class TrackDaoES implements TrackSearchDao {
             IndexResponse ir = irb.execute().actionGet();
             //searchChange.setSearchKey(ir.getId());
 
-            if (logger.isDebugEnabled())
-                logger.debug("Save:Document entityId [{}], [{}], logId= [{}] searchKey [{}] index [{}/{}]",
-                        searchChange.getEntityId(),
-                        searchChange.getMetaKey(),
-                        searchChange.getLogId(),
-                        ir.getId(),
-                        indexName,
-                        documentType);
+            logger.debug("Save:Document entityId [{}], [{}], logId= [{}] searchKey [{}] index [{}/{}]",
+                    searchChange.getEntityId(),
+                    searchChange.getMetaKey(),
+                    searchChange.getLogId(),
+                    ir.getId(),
+                    indexName,
+                    documentType);
 
             return searchChange;
         } catch (MapperParsingException e) {
@@ -148,7 +147,7 @@ public class TrackDaoES implements TrackSearchDao {
                             searchChange.getDocumentType(),
                             searchChange.getSearchKey());
 
-            if ( searchChange.getParent() !=null ) {
+            if (searchChange.getParent() != null) {
                 request.setParent(searchChange.getParent().getCode());
             }
 
@@ -201,10 +200,10 @@ public class TrackDaoES implements TrackSearchDao {
                 IndexResponse indexResponse = ur.actionGet();
                 logger.debug("Updated [{}] logId=[{}] for [{}] to version [{}]", searchChange.getSearchKey(), searchChange.getLogId(), searchChange, indexResponse.getVersion());
             }
-        } catch (IndexMissingException e) { // administrator must have deleted it, but we think it still exists
-            logger.info("Attempt to update non-existent index [{}]. Creating it..", searchChange.getIndexName());
-            purgeCache();
-            return save(searchChange, source);
+//        } catch (IndexMissingException e) { // administrator must have deleted it, but we think it still exists
+//            logger.info("Attempt to update non-existent index [{}]. Creating it..", searchChange.getIndexName());
+//            purgeCache();
+//            return save(searchChange, source);
         } catch (NoShardAvailableActionException e) {
             return save(searchChange, source);
         }
@@ -260,7 +259,7 @@ public class TrackDaoES implements TrackSearchDao {
     }
 
     private String getJsonToIndex(SearchChange searchChange) {
-        ObjectMapper mapper = FlockDataJsonFactory.getObjectMapper();
+        ObjectMapper mapper = FdJsonObjectMapper.getObjectMapper();
         Map<String, Object> index = getMapFromChange(searchChange);
         try {
             return mapper.writeValueAsString(index);
@@ -315,12 +314,38 @@ public class TrackDaoES implements TrackSearchDao {
             indexMe.put(EntitySearchSchema.DESCRIPTION, searchChange.getDescription());
 
         if (!searchChange.getTagValues().isEmpty())
-            setTags(indexMe, searchChange.getTagValues());
+            setTags("", indexMe, searchChange.getTagValues());
+
+        if (!searchChange.getEntityLinks().isEmpty())
+            setEntityLinks(indexMe, searchChange.getEntityLinks());
 
         return indexMe;
     }
 
-    private void setTags(Map<String, Object> indexMe, HashMap<String, Map<String, ArrayList<SearchTag>>> tagValues) {
+    private void setEntityLinks(Map<String, Object> indexMe, Collection<EntityKeyBean> entityLinks) {
+
+        for (EntityKeyBean linkedEntity : entityLinks) {
+            String prefix;
+            if (linkedEntity.getRelationship() == null || linkedEntity.getRelationship().equals("") || linkedEntity.getRelationship().equalsIgnoreCase(linkedEntity.getDocumentType())) {
+                prefix = "e." + linkedEntity.getDocumentType().toLowerCase() + ".";
+            } else {
+                prefix = "e." + linkedEntity.getDocumentType().toLowerCase() + "." + linkedEntity.getRelationship() + ".";
+            }
+            setNonEmptyValue(prefix + EntitySearchSchema.CODE, linkedEntity.getCode(), indexMe);
+            setNonEmptyValue(prefix + EntitySearchSchema.INDEX, linkedEntity.getIndex(), indexMe);
+            setNonEmptyValue(prefix + EntitySearchSchema.DESCRIPTION, linkedEntity.getDescription(), indexMe);
+            setNonEmptyValue(prefix + "name", linkedEntity.getName(), indexMe);
+            setTags(prefix, indexMe, linkedEntity.getSearchTags());
+        }
+    }
+
+    private void setNonEmptyValue(String key, Object value, Map<String, Object> values) {
+        if (value != null && !value.toString().equals("")) {
+            values.put(key, value);
+        }
+    }
+
+    private void setTags(String prefix, Map<String, Object> indexMe, HashMap<String, Map<String, ArrayList<SearchTag>>> tagValues) {
 
         Collection<String> uniqueTags = new ArrayList<>();
         Collection<String> outputs = new ArrayList<>();
@@ -374,12 +399,12 @@ public class TrackDaoES implements TrackSearchDao {
         if (!squash.isEmpty())
             byRelationship.putAll(squash);
         if (!byRelationship.isEmpty()) {
-            indexMe.put(EntitySearchSchema.TAG, byRelationship);
+            indexMe.put(prefix + EntitySearchSchema.TAG, byRelationship);
         }
-        if (!uniqueTags.isEmpty()) {
-//            Map<String,Object>suggestInput = new HashMap<>();
-            //suggestInput.put("input", uniqueTags);
-
+        //
+        if (prefix.equals("") && !uniqueTags.isEmpty()) {
+            // ALL_TAGS contains autocomplete searchable tags.
+            // ToDo: Prefix == null check stops linked entity tags being written to this list
             indexMe.put(EntitySearchSchema.ALL_TAGS, uniqueTags);
         }
 

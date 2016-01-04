@@ -95,21 +95,17 @@ public class EntityServiceNeo4J implements EntityService {
 
     private Logger logger = LoggerFactory.getLogger(EntityServiceNeo4J.class);
 
-    //    @Override
-//    @Async
-//    public Future<EntityKeyBean> findParent(Entity childEntity) {
-//        Entity parent = entityDao.findParent (childEntity);
-//        if ( parent != null )
-//            return new AsyncResult<>(new EntityKeyBean(parent));
-//        return new AsyncResult<>(null);
-//    }
     @Override
-//    @Async
     public EntityKeyBean findParent(Entity childEntity) {
         Entity parent = entityDao.findParent (childEntity);
         if ( parent != null )
             return new EntityKeyBean(parent);
         return null;
+    }
+
+    @Override
+    public Collection<EntityKeyBean> getInboundEntities(Entity entity, boolean withEntityTags) {
+        return entityDao.getInboundEntities(entity, withEntityTags);
     }
 
 
@@ -246,7 +242,14 @@ public class EntityServiceNeo4J implements EntityService {
         Entity entity = entityDao.create(entityInput, segment, entityUser, documentType);
         if (entity.getId() == null)
             entityInput.setMetaKey("NT " + segment.getFortress().getId()); // We ain't tracking this
+        else if ( !entityInput.getEntityLinks().isEmpty()){
+            // DAT-525
+            EntityKeyBean thisEntity = new EntityKeyBean(entity);
+            for (String relationship : entityInput.getEntityLinks().keySet()) {
+                linkEntities(segment.getCompany(),thisEntity, entityInput.getEntityLinks().get(relationship), relationship );
+            }
 
+        }
         //entityInput.setMetaKey(entity.getMetaKey());
         logger.trace("Entity created: id=[{}] key=[{}] for fortress [{}] callerKeyRef = [{}]", entity.getId(), entity.getMetaKey(), segment.getFortress().getCode(), entity.getKey());
         return entity;

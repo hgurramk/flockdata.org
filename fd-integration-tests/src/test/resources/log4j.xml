@@ -16,6 +16,14 @@
         <level value="info"/>
     </logger>
 
+    <logger name="org.springframework.context">
+        <level value="error"/>
+    </logger>
+
+    <logger name="org.springframework.beans">
+        <level value="error"/>
+    </logger>
+
     <logger name="org.springframework.transaction">
         <level value="error"/>
     </logger>
@@ -31,7 +39,7 @@
         <level value="error"/>
     </logger>
     <logger name="org.springframework.integration">
-        <level value="info"/>
+        <level value="error"/>
     </logger>
 
     <logger name="org.hibernate">
