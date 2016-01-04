@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
   <context confirmationNeeded="false" name="Default">
-    <contextParameter comment="" name="Param1" prompt="Param1?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;C:\FlockData\column-parsing.json&quot;"/>
-    <contextParameter comment="" name="Param2" prompt="Param2?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;C:\FlockData\pac.txt&quot;"/>
-    <contextParameter comment="" name="Param3" prompt="Param3?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;C:\FlockData\contentprofile.json&quot;"/>
+    <contextParameter comment="" name="Param1" prompt="Param1?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;/FlockData/column-parsing.json&quot;"/>
+    <contextParameter comment="" name="Param2" prompt="Param2?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;/FlockData/pac.txt&quot;"/>
+    <contextParameter comment="" name="Param3" prompt="Param3?" promptNeeded="false" repositoryContextId="_LUw3UK7IEeWzgZDm97uRvw" type="id_String" value="&quot;/FlockData/contentprofile.json&quot;"/>
   </context>
   <parameters>
     <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value="0" show="false"/>

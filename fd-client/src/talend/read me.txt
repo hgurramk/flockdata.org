@@ -1,11 +1,28 @@
-1. Version:TOS_DI-20150908_1633-V6.0.1
-	   extenal link: (SourceForge.net)
+1. What it is a readme for (including version) both a name and a brief description 
+This readme is to config and run the file processing transformations for various input type of files to various out types.
 
-2. FD (FlockData)
+Download Talend Open Studio
+Version:TOS_DI-20150908_1633-V6.0.1
+	   extenal link: (www.SourceForge.net)
 
-3. Project Description:
+JDK Version : jdk1.8.0_65
 
-4. Code Snippet:
+
+2. Name of the projects and all sub-modules and libraries (sometimes they are named different and very confusing to new users) 
+Below are the core methods that would be utilized
+TransformerRoutine.transformToEntity(..,..)
+TransformerRoutine.transformTags(..,..)
+
+3.Descriptions of all the project, and all sub-modules and libraries 
+Librarys : 
+	a) fd-client-0.98-BUILD-20151218.061343-91.jar (FDataTransfor Job)  and Version 91
+
+	b) fd-client-0.98-BUILD-20151218.210457-92.jar
+	   fd-client-0.98-BUILD-20151218.210457-92-tests.jar  (FDataFileProcessor Job) and Version 92
+
+
+4. 5-line code snippet on how its used (if it's a library)
+Code Snippet:
 	try{
   	ImportProfile importProfile = ClientConfiguration.getImportParams(context.Param1);
   
@@ -28,22 +45,31 @@
     	throw e;
    		}
 
-5. File Last Edited : 12/31/2015
+5. When the file was last edited
+File Last Edited : 12/31/2015
 
-6. What you need to run or use it :
+6. What you need to run or use it (paths could be different based on the configuration)
+
+Windows
+========
+C:\fd\prarameters_Export\FDataExample>FDataExample_run --context_param Param1=C:/fd/column-parsing.json --context_param Param2=C:/fd/pac.txt
+
+Linux
+========
+/var/data/fd/jobs/FDataTransform_run --context_param Param1= /fd/data/column-parsing.json --context_param Param2= /fd/data/pac.txt
 
 	
-
-7.What you need to know to get it going :
+7. What you need to know to get it going
+What you need to know to get it going :
 
 	Context	: Repository/Context/FDContext
 	Routine : Repository/Code/FDContext
 	job	: Repository/JobDesing/FDataTranafor
 
 8. Configuration Instructions:
-	Param1 : "C:/fd/column-parsing.json"
-	Param2 : "C:/fd/pac.txt"
-	Param2 : "C:/fd/contentprofile.json"
+	Param1 : "/fd/column-parsing.json"
+	Param2 : "/fd/pac.txt"
+	Param2 : "/fd/contentprofile.json"
 
 9. Installation Instructions :
 	
@@ -73,13 +99,15 @@
 
 11. Sample Data :
 	
-	Path :	D:\ForkSample\flockdata.org\fd-client\src\talend\data
+	Path :	\ForkSample\flockdata.org\fd-client\src\talend\data
+
 
 12. Instruction to grab the latest code and detailed instructions to build it (or quick overview and "Read INSTALL")
 
 	Path :	https://github.com/hgurramk/flockdata.org/tree/master/fd-client/src/talend
 		
-13.Contact Information :
+
+13.Developer Contact Information :
 	Name	: Hem Naidu
 	Email	: hnaidu@htconsultancy.us
 	
